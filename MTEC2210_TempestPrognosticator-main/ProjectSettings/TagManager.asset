@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Helper
+  - DoubleJump
+  - Phase
+  - Helper1
   layers:
   - Default
   - TransparentFX

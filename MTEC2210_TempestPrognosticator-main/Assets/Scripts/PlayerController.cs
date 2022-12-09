@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private bool jumped = false;
     private bool doubleJumpUsed = false;
     public LayerMask Ground;
+    public bool doubleJumpActive = false;
 
     public float groundCheckDistance;
     public Vector3 groundCheckOffset;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool phasing = false;
     public float phaseForce = 6;
     public Collider2D col;
+    public bool phaseActive = false; 
 
     //sprite
     public SpriteRenderer ghost;
@@ -74,16 +76,17 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("I jumped");
             }
 
-            else if (!doubleJumpUsed)
+            else if (!doubleJumpUsed && doubleJumpActive)
             {
                 doubleJumpUsed = true;
                 jumped = true;
                 //Debug.Log("I jumped AGAIN");
             }
+
         }
 
         //PHASING
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && phaseActive)
         {
             phasing = true;
         }
@@ -133,5 +136,14 @@ public class PlayerController : MonoBehaviour
         return check;
     }
 
-  
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "DoubleJump")
+            doubleJumpActive = true;
+
+        if (col.gameObject.tag == "Phase")
+            phaseActive = true;
+    }
+
+
 }
