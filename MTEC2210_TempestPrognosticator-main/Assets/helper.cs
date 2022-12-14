@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 public class helper : MonoBehaviour
 {
-    public TextMeshPro message;
+    public GameObject message;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +21,15 @@ public class helper : MonoBehaviour
     {
         if(col.gameObject.tag == "Player")
         {
-            message.enabled = true;
+            message.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            message.SetActive(false);
         }
     }
 }

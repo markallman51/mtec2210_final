@@ -38,38 +38,29 @@ public class CameraMove : MonoBehaviour
 
 
         //if (playerX < xBoundRight && playerX > xBoundLeft)
-            
-        //transform.Translate(0, 0, -10);
+
+        //we need both ifs.
+        //the first to check if the player is at each quarter of the screen.
+        //the second to check if the player is at each end of the play area.
         if (playerScreenPos.x < screenQuarterX || playerScreenPos.x > Screen.width - screenQuarterX)
         {
-            //we need both ifs.
-            //the first to check if the player is at each quarter of the screen.
-            //the second to check if the player is at each end of the play area.
+
             if (playerX < xBoundRight && playerX > xBoundLeft)
                 transform.position = new Vector3(Mathf.Lerp(transform.position.x, playerX, speed * Time.deltaTime),
-                    Mathf.Lerp(transform.position.y, playerY, speed * Time.deltaTime), -10);
+                    transform.position.y, -10);
 
-            //transform.position = Vector3.Lerp(transform.position, player.transform.position, speed * Time.deltaTime);
+            //Mathf.Lerp(transform.position.y, playerY, speed * Time.deltaTime)
+            //Mathf.Lerp(transform.position.x, playerX, speed * Time.deltaTime)
 
-            /*
-             11/26 Update:
-            WorldToScreenPoint gets the player positon relative to the screen. now the camera doesn't move with the players every movement
-            HOWEVER the camera is studdery not. need to figure this out because I'll neeed this method for camfollow on the y. the other
-            method wont work
 
-            11/30 Update:
-            The way things are built now, camera is still kinda studdery but I like the way it functions. 
-            If I can keep boundaries on x axis while keeping this the way it is, cam dun.
-             */
         }
 
-        if(playerScreenPos.x < screenThirdY || playerScreenPos.x > Screen.height - screenThirdY
+        if (playerScreenPos.y < screenThirdY || playerScreenPos.y > Screen.height - screenThirdY
             || playerScreenPos.y < 0)
         {
             //if (playerY < yBoundTop && playerY > yBoundBottom)
             if (playerY < yBoundTop && playerY > yBoundBottom)
-                transform.position = new Vector3(Mathf.Lerp(transform.position.x, playerX, speed * Time.deltaTime), 
-                Mathf.Lerp(transform.position.y, playerY, speed * Time.deltaTime), -10);
+                transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, playerY, speed * Time.deltaTime), -10);
         }
     }
 
