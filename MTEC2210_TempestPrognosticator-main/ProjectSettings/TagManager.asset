@@ -7,7 +7,9 @@ TagManager:
   - Helper
   - DoubleJump
   - Phase
+  - Safety Platform
   - Helper1
+  - Win
   layers:
   - Default
   - TransparentFX

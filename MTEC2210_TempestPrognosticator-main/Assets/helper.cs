@@ -27,7 +27,7 @@ public class helper : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player" && this.tag != "Safety Platform" && this.tag != "Win")
         {
             message.SetActive(false);
         }

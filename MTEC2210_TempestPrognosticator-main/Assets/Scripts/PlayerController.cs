@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public bool doubleJumpActive = false;
 
     public float groundCheckDistance;
+    public float landCheckDistance;
     public Vector3 groundCheckOffset;
 
     //phasing
@@ -28,6 +31,10 @@ public class PlayerController : MonoBehaviour
 
     //sprite
     public SpriteRenderer ghost;
+
+    //animation
+    public Animator anime;
+    public bool grounded;
     
     // Start is called before the first frame update
     void Start()
@@ -57,10 +64,11 @@ public class PlayerController : MonoBehaviour
             movingLeft = true;
             movingRight = false ;
         }
-            
+
 
 
         //JUMPING
+        grounded = GroundCheck();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             /*
@@ -68,21 +76,24 @@ public class PlayerController : MonoBehaviour
             -if on ground: reset previous double jump, then jump
             -if not on ground, but double jump available: mark double jump as used, jump again
              */
-            
-            if (GroundCheck())
+
+            if (grounded)
             {
                 doubleJumpUsed = false;
                 jumped = true;
-                //Debug.Log("I jumped");
+                //anime.SetTrigger("Jumping");
+                Debug.Log(anime.GetBool("Jumping"));
+                //Landing();
             }
 
             else if (!doubleJumpUsed && doubleJumpActive)
             {
                 doubleJumpUsed = true;
                 jumped = true;
-                //Debug.Log("I jumped AGAIN");
+                //anime.SetTrigger("Jumping");
+                Debug.Log(anime.GetBool("Jumping"));
+                //Landing();
             }
-
         }
 
         //PHASING
@@ -90,6 +101,20 @@ public class PlayerController : MonoBehaviour
         {
             phasing = true;
         }
+
+        //ANIMATION
+        if (xVel == 0)
+            anime.SetBool("Moving", false);
+        else
+            anime.SetBool("Moving", true);
+
+        if (grounded)
+            anime.SetBool("Jumping", false);
+
+        else
+            anime.SetBool("Jumping", true);
+
+
 
 
     }
@@ -134,6 +159,34 @@ public class PlayerController : MonoBehaviour
             Physics2D.Raycast(transform.position - groundCheckOffset, Vector3.down, groundCheckDistance, Ground));
         
         return check;
+    }
+
+    private void Landing()
+    {
+        Debug.Log("check for landing");
+
+        bool landed = (
+        Physics2D.Raycast(transform.position + groundCheckOffset, Vector3.down, landCheckDistance, Ground) ||
+        Physics2D.Raycast(transform.position - groundCheckOffset, Vector3.down, landCheckDistance, Ground));
+        Debug.Log(landed);
+
+        if(landed == false)
+        {
+            landed = (
+            Physics2D.Raycast(transform.position + groundCheckOffset, Vector3.down, landCheckDistance, Ground) ||
+            Physics2D.Raycast(transform.position - groundCheckOffset, Vector3.down, landCheckDistance, Ground));
+        }
+            
+
+        if (landed == true)
+        {
+            anime.SetBool("Jumping", false);
+            Debug.Log("i've landed");
+        }
+            
+
+        Debug.Log(anime.GetBool("Jumping"));
+
     }
 
     private void OnTriggerEnter2D(Collider2D col)
